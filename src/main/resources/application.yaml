@@ -1,0 +1,23 @@
+server:
+  port: 8086
+  error:
+    include-message: always
+
+external:
+  api:
+    shop-mock-service:
+      url: http://web-shop-mock-service:8082/products
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    com.example.webshopmockservice: DEBUG

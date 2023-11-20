@@ -1,0 +1,9 @@
+scrape_configs:
+  - job_name: 'prometheus-web-search-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['web-search-service:8086']
+
+  - job_name: 'web-cadvisor'
+    static_configs:
+      - targets: [ 'web-cadvisor:8080' ]
