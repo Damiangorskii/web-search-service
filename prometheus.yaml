@@ -4,6 +4,11 @@ scrape_configs:
     static_configs:
       - targets: ['web-search-service:8086']
 
+  - job_name: 'prometheus-web-shopping-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'web-shopping-service:8087' ]
+
   - job_name: 'web-cadvisor'
     static_configs:
       - targets: [ 'web-cadvisor:8080' ]

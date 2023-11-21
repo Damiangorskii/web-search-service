@@ -11,6 +11,16 @@ services:
     depends_on:
       - web-prometheus
 
+  web-shopping-service:
+    image: web-shopping-service:latest
+    container_name: web-shopping-service
+    ports:
+      - "8087:8087"
+    networks:
+      - web_monitoring_network
+    depends_on:
+      - web-prometheus
+
   web-shop-mock-service:
     image: shop-mock-service:latest
     container_name: web-shop-mock-service
