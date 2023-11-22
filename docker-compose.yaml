@@ -21,6 +21,16 @@ services:
     depends_on:
       - web-prometheus
 
+  web-order-service:
+    image: web-order-service:latest
+    container_name: web-order-service
+    ports:
+      - "8088:8088"
+    networks:
+      - web_monitoring_network
+    depends_on:
+      - web-prometheus
+
   web-shop-mock-service:
     image: shop-mock-service:latest
     container_name: web-shop-mock-service
