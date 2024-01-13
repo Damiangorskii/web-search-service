@@ -7,15 +7,12 @@ import com.example.websearchservice.service.SearchService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/search/products")
@@ -23,6 +20,11 @@ import java.util.List;
 public class SearchController {
 
     private final SearchService searchService;
+
+    @GetMapping("/external")
+    public CompletableFuture<Stream<Product>> getAllProductsIncludingExternalOnes() {
+        return searchService.getAllProductsIncludingExternalOnes();
+    }
 
     @GetMapping
     public List<Product> getAllProducts() {

@@ -6,8 +6,8 @@ import com.example.websearchservice.error.InvalidExternalResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +27,48 @@ public class ShopMockServiceClient {
     public List<ProductDTO> getAllProducts() {
         try {
             ResponseEntity<ProductDTO[]> response = restTemplate.getForEntity(config.getUrl(), ProductDTO[].class);
+            return Arrays.asList(response.getBody());
+        } catch (HttpStatusCodeException e) {
+            if (e.getStatusCode().is5xxServerError()) {
+                throw new ExternalServiceUnavailableException("Shop-mock-service is currently unavailable");
+            } else if (e.getStatusCode().is4xxClientError()) {
+                throw new InvalidExternalResponseException("Invalid response from shop-mock-service.");
+            }
+            throw e;
+        }
+    }
+
+    public List<ProductDTO> getAllGameProducts() {
+        try {
+            ResponseEntity<ProductDTO[]> response = restTemplate.getForEntity(config.getUrl() + "/external/games", ProductDTO[].class);
+            return Arrays.asList(response.getBody());
+        } catch (HttpStatusCodeException e) {
+            if (e.getStatusCode().is5xxServerError()) {
+                throw new ExternalServiceUnavailableException("Shop-mock-service is currently unavailable");
+            } else if (e.getStatusCode().is4xxClientError()) {
+                throw new InvalidExternalResponseException("Invalid response from shop-mock-service.");
+            }
+            throw e;
+        }
+    }
+
+    public List<ProductDTO> getAllHardwareProducts() {
+        try {
+            ResponseEntity<ProductDTO[]> response = restTemplate.getForEntity(config.getUrl() + "/external/hardware", ProductDTO[].class);
+            return Arrays.asList(response.getBody());
+        } catch (HttpStatusCodeException e) {
+            if (e.getStatusCode().is5xxServerError()) {
+                throw new ExternalServiceUnavailableException("Shop-mock-service is currently unavailable");
+            } else if (e.getStatusCode().is4xxClientError()) {
+                throw new InvalidExternalResponseException("Invalid response from shop-mock-service.");
+            }
+            throw e;
+        }
+    }
+
+    public List<ProductDTO> getAllSoftwareToolProducts() {
+        try {
+            ResponseEntity<ProductDTO[]> response = restTemplate.getForEntity(config.getUrl() + "/external/software-tools", ProductDTO[].class);
             return Arrays.asList(response.getBody());
         } catch (HttpStatusCodeException e) {
             if (e.getStatusCode().is5xxServerError()) {

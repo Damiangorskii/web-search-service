@@ -1,6 +1,7 @@
 package com.example.websearchservice.service;
 
 import com.example.websearchservice.client.ShopMockServiceClient;
+import com.example.websearchservice.dto.ProductDTO;
 import com.example.websearchservice.mapper.ProductAdapter;
 import com.example.websearchservice.model.AdvancedSearchRequestBody;
 import com.example.websearchservice.model.Category;
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -20,6 +23,26 @@ public class SearchService {
 
     private final ShopMockServiceClient shopMockServiceClient;
     private final ProductAdapter productAdapter;
+
+    public CompletableFuture<Stream<Product>> getAllProductsIncludingExternalOnes() {
+        CompletableFuture<Stream<ProductDTO>> allProducts = CompletableFuture.supplyAsync(
+                () -> shopMockServiceClient.getAllProducts().stream());
+
+        CompletableFuture<Stream<ProductDTO>> gameProducts = CompletableFuture.supplyAsync(
+                () -> shopMockServiceClient.getAllGameProducts().stream());
+
+        CompletableFuture<Stream<ProductDTO>> hardwareProducts = CompletableFuture.supplyAsync(
+                () -> shopMockServiceClient.getAllHardwareProducts().stream());
+
+        CompletableFuture<Stream<ProductDTO>> softwareToolProducts = CompletableFuture.supplyAsync(
+                () -> shopMockServiceClient.getAllSoftwareToolProducts().stream());
+
+        return CompletableFuture.allOf(allProducts, gameProducts, hardwareProducts, softwareToolProducts)
+                .thenApply(v -> Stream.of(allProducts, gameProducts, hardwareProducts, softwareToolProducts)
+                        .flatMap(CompletableFuture::join)
+                        .distinct()
+                        .map(productAdapter::adaptToEntity));
+    }
 
     public List<Product> getAllProducts() {
         return shopMockServiceClient.getAllProducts()
