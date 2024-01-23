@@ -6,6 +6,11 @@ services:
     container_name: web-search-service
     ports:
       - "8086:8086"
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: '2g'
     networks:
       - web_monitoring_network
     depends_on:
@@ -16,6 +21,11 @@ services:
     container_name: web-shopping-service
     ports:
       - "8087:8087"
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: '2g'
     networks:
       - web_monitoring_network
     depends_on:
@@ -26,6 +36,11 @@ services:
     container_name: web-order-service
     ports:
       - "8088:8088"
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: '2g'
     networks:
       - web_monitoring_network
     depends_on:
